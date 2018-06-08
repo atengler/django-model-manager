@@ -683,6 +683,17 @@ class GeneratedAction(workflows.Action):
             ctx = yaml.load(source_context)
         if not isinstance(ctx, dict):
             return {}
+        # UGLY HACK
+        _version  = self.global_context.get('_cookiecutter_version')
+        for item in ctx.get('general_params_action', []):
+            for idx, field in enumerate(item.get('fields', [])):
+                if field.get('name', '') == 'mcp_version' and field.get('initial', '') != _version:
+                    item['fields'][idx] = {
+                        'readonly': True,
+                        'initial': _version,
+                        'type': 'TEXT',
+                        'name': 'mcp_version'
+                    }
         return ctx[self.slug]
 
     def render_doc(self, value, header_level=None, report_level=None):
@@ -788,6 +799,17 @@ class GeneratedStep(workflows.Step):
             ctx = yaml.load(source_context)
         if not isinstance(ctx, dict):
             return {}
+        # UGLY HACK
+        _version  = self.global_context.get('_cookiecutter_version')
+        for item in ctx.get('general_params_action', []):
+            for idx, field in enumerate(item.get('fields', [])):
+                if field.get('name', '') == 'mcp_version' and field.get('initial', '') != _version:
+                    item['fields'][idx] = {
+                        'readonly': True,
+                        'initial': _version,
+                        'type': 'TEXT',
+                        'name': 'mcp_version'
+                    }
         return ctx[self.action_class.slug]
 
 
